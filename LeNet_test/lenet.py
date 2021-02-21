@@ -22,7 +22,8 @@ class LeNet:
         if K.image_data_format() == "channels_first":
             inputShape = (depth,height,width)
 
-        # start stacking our Net
+        # model architecture
+        # input => [conv ReLU pool] => [conv ReLU pool] => FC => FC => softmax
 
         # fist CONV 
         model.add(Conv2D(20,(5,5),padding='same',input_shape=inputShape))

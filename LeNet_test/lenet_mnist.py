@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 from tensorflow.keras import backend as K 
 import matplotlib.pyplot as plt 
-import numpy as numpy
+import numpy as np
 
 print("[INFO] accessing MNIST ")
 
@@ -38,12 +38,24 @@ model.compile(loss='categorical_crossentropy',optimizer=opt,metrics=['accuracy']
 
 
 # start training 
+epoch = 5
+bs = 128
 print("[INFO] training network......")
-H = model.fit(x_train,y_train,validation_data=(x_test,y_test),batch_size=128,epochs=20,verbose=1)
+H = model.fit(x_train,y_train,validation_data=(x_test,y_test),batch_size=bs,epochs=epoch,verbose=1)
 
 
 # evaluate the network 
 print("[INFO] evaluating network....")
-predictions = model.predict(x_test,batch_size=128)
+predictions = model.predict(x_test,batch_size=bs)
 print(classification_report(y_test.argmax(axis=1),predictions.argmax(axis=1),target_names=[str(x) for x in le.classes_]))
+
+# show Acc and Loss curve 
+plt.style.use("ggplot")
+plt.figure()
+plt.plot(np.arange(0,epoch),H.history["loss"],label='train_loss')
+plt.plot(np.arange(0,epoch),H.history["val_loss"],label='val_loss')
+plt.plot(np.arange(0,epoch),H.history["accuracy"],label='train_acc')
+plt.plot(np.arange(0,epoch),H.history["val_accuracy"],label='val_acc')
+plt.legend()
+plt.show()
 
